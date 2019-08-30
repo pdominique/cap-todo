@@ -4,9 +4,10 @@
     git clone https://github.com/pdominique/cap-todo.git
     cd cap-todo
     ```
-1. Install all dependencies
+1. Install all dependencies and deploy app
     ```sh
     npm install
+    cds deploy
     ```
 
 1. Run the server
