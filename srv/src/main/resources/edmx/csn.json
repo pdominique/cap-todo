@@ -1,0 +1,321 @@
+{
+  "definitions": {
+    "TodoService": {
+      "kind": "service"
+    },
+    "TodoService.People": {
+      "kind": "entity",
+      "@cds.persistence.name": "TODOSERVICE_PEOPLE",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "todo.People"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "name": {
+          "@cds.persistence.name": "NAME",
+          "type": "cds.String"
+        },
+        "plannedTasks": {
+          "@cds.persistence.name": "PLANNEDTASKS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "TodoService.PlannedTasks",
+          "on": [
+            {
+              "ref": [
+                "plannedTasks",
+                "person"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      },
+      "$syntax": "projection"
+    },
+    "TodoService.PlannedTasks": {
+      "kind": "entity",
+      "@cds.persistence.name": "TODOSERVICE_PLANNEDTASKS",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "todo.PlannedTasks"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "task": {
+          "@cds.persistence.name": "TASK",
+          "key": true,
+          "type": "cds.Association",
+          "target": "TodoService.Tasks",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "task_ID"
+            }
+          ]
+        },
+        "person": {
+          "@cds.persistence.name": "PERSON",
+          "key": true,
+          "type": "cds.Association",
+          "target": "TodoService.People",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "person_ID"
+            }
+          ]
+        },
+        "startDate": {
+          "@cds.persistence.name": "STARTDATE",
+          "key": true,
+          "type": "cds.DateTime"
+        },
+        "endDate": {
+          "@cds.persistence.name": "ENDDATE",
+          "key": true,
+          "type": "cds.DateTime"
+        },
+        "tentative": {
+          "@cds.persistence.name": "TENTATIVE",
+          "type": "cds.Boolean"
+        },
+        "task_ID": {
+          "@cds.persistence.name": "TASK_ID",
+          "@odata.foreignKey4": "task",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "person_ID": {
+          "@cds.persistence.name": "PERSON_ID",
+          "@odata.foreignKey4": "person",
+          "key": true,
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "TodoService.Tasks": {
+      "kind": "entity",
+      "@cds.persistence.name": "TODOSERVICE_TASKS",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "todo.Tasks"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "title": {
+          "@cds.persistence.name": "TITLE",
+          "type": "cds.String"
+        },
+        "done": {
+          "@cds.persistence.name": "DONE",
+          "type": "cds.Boolean"
+        },
+        "plannedTasks": {
+          "@cds.persistence.name": "PLANNEDTASKS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "TodoService.PlannedTasks",
+          "on": [
+            {
+              "ref": [
+                "plannedTasks",
+                "task"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      },
+      "$syntax": "projection"
+    },
+    "todo.People": {
+      "kind": "entity",
+      "@cds.persistence.name": "TODO_PEOPLE",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "name": {
+          "@cds.persistence.name": "NAME",
+          "type": "cds.String"
+        },
+        "plannedTasks": {
+          "@cds.persistence.name": "PLANNEDTASKS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "todo.PlannedTasks",
+          "on": [
+            {
+              "ref": [
+                "plannedTasks",
+                "person"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "todo.PlannedTasks": {
+      "kind": "entity",
+      "@cds.persistence.name": "TODO_PLANNEDTASKS",
+      "elements": {
+        "task": {
+          "@cds.persistence.name": "TASK",
+          "key": true,
+          "type": "cds.Association",
+          "target": "todo.Tasks",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "task_ID"
+            }
+          ]
+        },
+        "person": {
+          "@cds.persistence.name": "PERSON",
+          "key": true,
+          "type": "cds.Association",
+          "target": "todo.People",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "person_ID"
+            }
+          ]
+        },
+        "startDate": {
+          "@cds.persistence.name": "STARTDATE",
+          "key": true,
+          "type": "cds.DateTime"
+        },
+        "endDate": {
+          "@cds.persistence.name": "ENDDATE",
+          "key": true,
+          "type": "cds.DateTime"
+        },
+        "tentative": {
+          "@cds.persistence.name": "TENTATIVE",
+          "type": "cds.Boolean"
+        },
+        "task_ID": {
+          "@cds.persistence.name": "TASK_ID",
+          "@odata.foreignKey4": "task",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "person_ID": {
+          "@cds.persistence.name": "PERSON_ID",
+          "@odata.foreignKey4": "person",
+          "key": true,
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "todo.Tasks": {
+      "kind": "entity",
+      "@cds.persistence.name": "TODO_TASKS",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "title": {
+          "@cds.persistence.name": "TITLE",
+          "type": "cds.String"
+        },
+        "done": {
+          "@cds.persistence.name": "DONE",
+          "type": "cds.Boolean"
+        },
+        "plannedTasks": {
+          "@cds.persistence.name": "PLANNEDTASKS",
+          "type": "cds.Association",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "todo.PlannedTasks",
+          "on": [
+            {
+              "ref": [
+                "plannedTasks",
+                "task"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "version": {
+    "csn": "1.0"
+  },
+  "meta": {
+    "creator": "CDS Compiler v1.17.1"
+  },
+  "$version": "1.0",
+  "@sql_mapping": "plain"
+}

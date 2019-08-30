@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+  <edmx:DataServices m:DataServiceVersion="2.0">
+    <Schema Namespace="TodoService" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="People" EntityType="TodoService.People"/>
+        <EntitySet Name="PlannedTasks" EntityType="TodoService.PlannedTasks"/>
+        <EntitySet Name="Tasks" EntityType="TodoService.Tasks"/>
+        <AssociationSet Name="PlannedTasks_task" Association="TodoService.PlannedTasks_task">
+          <End Role="PlannedTasks" EntitySet="PlannedTasks"/>
+          <End Role="Tasks" EntitySet="Tasks"/>
+        </AssociationSet>
+        <AssociationSet Name="PlannedTasks_person" Association="TodoService.PlannedTasks_person">
+          <End Role="PlannedTasks" EntitySet="PlannedTasks"/>
+          <End Role="People" EntitySet="People"/>
+        </AssociationSet>
+      </EntityContainer>
+      <EntityType Name="People">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="name" Type="Edm.String"/>
+        <NavigationProperty Name="plannedTasks" Relationship="TodoService.PlannedTasks_person" FromRole="People" ToRole="PlannedTasks"/>
+      </EntityType>
+      <EntityType Name="PlannedTasks">
+        <Key>
+          <PropertyRef Name="startDate"/>
+          <PropertyRef Name="endDate"/>
+          <PropertyRef Name="task_ID"/>
+          <PropertyRef Name="person_ID"/>
+        </Key>
+        <NavigationProperty Name="task" Relationship="TodoService.PlannedTasks_task" FromRole="PlannedTasks" ToRole="Tasks"/>
+        <NavigationProperty Name="person" Relationship="TodoService.PlannedTasks_person" FromRole="PlannedTasks" ToRole="People"/>
+        <Property Name="startDate" Type="Edm.DateTimeOffset" Nullable="false"/>
+        <Property Name="endDate" Type="Edm.DateTimeOffset" Nullable="false"/>
+        <Property Name="tentative" Type="Edm.Boolean"/>
+        <Property Name="task_ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="person_ID" Type="Edm.Int32" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="Tasks">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="title" Type="Edm.String"/>
+        <Property Name="done" Type="Edm.Boolean"/>
+        <NavigationProperty Name="plannedTasks" Relationship="TodoService.PlannedTasks_task" FromRole="Tasks" ToRole="PlannedTasks"/>
+      </EntityType>
+      <Association Name="PlannedTasks_task">
+        <End Role="PlannedTasks" Type="TodoService.PlannedTasks" Multiplicity="*"/>
+        <End Role="Tasks" Type="TodoService.Tasks" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Tasks">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="PlannedTasks">
+            <PropertyRef Name="task_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="PlannedTasks_person">
+        <End Role="PlannedTasks" Type="TodoService.PlannedTasks" Multiplicity="*"/>
+        <End Role="People" Type="TodoService.People" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="People">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="PlannedTasks">
+            <PropertyRef Name="person_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
